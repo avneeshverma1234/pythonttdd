@@ -12,4 +12,14 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    try:
+        from teamcity import is_running_under_teamcity
+        from teamcity.unittestpy import TeamcityTestRunner
+
+        if is_running_under_teamcity():
+            runner = TeamcityTestRunner()
+        else:
+            runner = unittest.TextTestRunner()
+    except ModuleNotFoundError:
+        runner = unittest.TextTestRunner()
+    unittest.main(testRunner=runner)
